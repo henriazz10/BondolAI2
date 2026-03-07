@@ -29,7 +29,7 @@ class GeminiResponse:
         self.api_key = str(api_key)
         try:
             with logger as log:
-                log.write(f"Opening session with Gemini API '{api_key[:5]}...{api_key[2:]}' ", time=True,
+                log.write(f"Opening session with Gemini API '{api_key[:5]}...{api_key[-2:]}' ", time=True,
                           microseconds=False, log_label="INFO")
                 self.client = genai.Client(api_key=self.api_key)
                 log.write("Session opened successfully", time=True,

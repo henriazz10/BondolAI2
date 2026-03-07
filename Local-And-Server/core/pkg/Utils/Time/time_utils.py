@@ -3,14 +3,14 @@ from datetime import datetime
 
 def get_precision_time(ms_digits: int = 3) -> str:
     now = datetime.now()
-    if 0 >= ms_digits >= 6:
+    if 0 > ms_digits or ms_digits > 6:
         raise ValueError("ms_digits must be between 0 and 6")
 
     current_base_time = now.strftime('%Y-%m-%d %H:%M:%S')
-    micro_seconds = str(now.microsecond).zfill(6)[:ms_digits]
-
     if ms_digits == 0:
         return current_base_time
+    micro_seconds = str(now.microsecond).zfill(6)[:ms_digits]
+
 
     return f"{current_base_time}.{micro_seconds}"
 

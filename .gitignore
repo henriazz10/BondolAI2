@@ -56,4 +56,4 @@ sensitive/
 
 # # User's database
 # Any type of critical database
-database/local/
+database/
