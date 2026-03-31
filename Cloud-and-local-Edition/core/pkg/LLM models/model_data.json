@@ -1,0 +1,28 @@
+{
+    "gemini-3.1-pro-preview": {
+        "family": "Gemini",
+        "front_name": "Gemini 3.1 Pro (preview)",
+        "company": "Google",
+        "environment": "cloud",
+        "freemium": "n",
+        "pricing": {
+            "input_prompts_minus_200000_tokens": 2.0,
+            "input_prompts_more_than_200000_tokens": 4.0,
+            "output_prompts_minus_200000_tokens": 12.0,
+            "output_prompts_more_than_200000_tokens": 18.0
+        }
+    },
+    "db_example": {
+        "family": "example_family",
+        "front_name": "Example",
+        "company": "Example_Company",
+        "environment": "both",
+        "freemium": "y",
+        "pricing": {
+            "input_prompts_minus_200000_tokens": 10.0,
+            "input_prompts_more_than_200000_tokens": 11.0,
+            "output_prompts_minus_200000_tokens": 12.0,
+            "output_prompts_more_than_200000_tokens": 13.0
+        }
+    }
+}
