@@ -18,15 +18,15 @@
 import os
 
 from google.genai.types import Tool, GenerateContentConfig, GoogleSearch # I am going to use it later
-from ....Utils.Logs import log_manager
+from cale.core.pkg.Utils.Logs import log_manager
 from google.genai import types # I am also going to use it later
 import google.genai.errors
 from google import genai
 
 
-
 DENIED_API_CHARACTERS = [" ", "\n", "\t", "\r", "\v", "\f", "\"", "'", "\\", "/", ":", "*", "?", "<", ">", "|",
                          "@", "#", "$", "%", "^", "&", "+", "=", "`", "~", "(", ")", "[", "]", "{", "}"]
+
 
 log_manager = log_manager.LogManager()
 class GeminiResponse:
@@ -37,12 +37,12 @@ class GeminiResponse:
                           microseconds=False, log_label="ERROR")
             raise ValueError("API key is required.")
 
-        for i in DENIED_API_CHARACTERS:
-            if i in str(api_key):
-                with log_manager as log:
-                    log.write("Your API key contains invalid characters! Please check aistudio.google.com for"
-                              " more information", time=True, microseconds=False, log_label="ERROR")
-                raise ValueError("API key is not valid.")
+        if set(DENIED_API_CHARACTERS) & set(api_key):
+            with log_manager as log:
+                log.write("Your API key contains invalid characters! Please check aistudio.google.com for"
+                          " more information", time=True, microseconds=False, log_label="ERROR")
+            raise ValueError("API key is not valid.")
+
         self.api_key = str(api_key)
         try:
             with log_manager as log:
@@ -67,11 +67,20 @@ class GeminiResponse:
 
 
     def response(self, message):
-        pass
+
+        response = self.client.models.generate_content_stream(
+            model="gemini-3-flash-preview",
+            contents=[message]
+        )
+        for chunk in response:
+            yield chunk
 
 
 
 if __name__ == "__main__":
-    ai = GeminiResponse(api_key= os.getenv('GEMINI_API_KEY'))
 
-    ai.response("Hello, how are you?")
+    ai = GeminiResponse(api_key= os.getenv('GEMINI_API_KEY'))
+    full_response = "Model's answer:"
+    full_response += ai.response("Hello, how are you? Could you explain me how AI works?")
+    print(full_response)
+

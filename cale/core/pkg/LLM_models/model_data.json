@@ -5,6 +5,7 @@
         "company": "Google",
         "environment": "cloud",
         "freemium": "n",
+        "is_true_model": "y",
         "pricing": {
             "input_prompts_minus_200000_tokens": 2.0,
             "input_prompts_more_than_200000_tokens": 4.0,
@@ -18,6 +19,7 @@
         "company": "Example_Company",
         "environment": "both",
         "freemium": "y",
+        "is_true_model": "n",
         "pricing": {
             "input_prompts_minus_200000_tokens": 10.0,
             "input_prompts_more_than_200000_tokens": 11.0,
