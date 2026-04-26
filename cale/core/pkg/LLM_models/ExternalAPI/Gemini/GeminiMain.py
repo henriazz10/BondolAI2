@@ -80,7 +80,6 @@ class GeminiResponse:
 if __name__ == "__main__":
 
     ai = GeminiResponse(api_key= os.getenv('GEMINI_API_KEY'))
-    full_response = "Model's answer:"
-    full_response += ai.response("Hello, how are you? Could you explain me how AI works?")
-    print(full_response)
+    for i in ai.response("Hello, how are you? Could you explain me how AI works?"):
+        print(i.text)
 

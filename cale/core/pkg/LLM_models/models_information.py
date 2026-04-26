@@ -29,7 +29,9 @@ class ModelInformation:
         try:
             with open(JSON_NAME + ".json", "r", encoding='utf-8') as f:
                 self.models_info = json.load(f)
-            db_parameters.extend(self.models_info["db_example"])
+            self.example_template = self.models_info["db_example"]
+            db_parameters.extend(self.example_template)
+
 
 
         except FileNotFoundError:
@@ -58,11 +60,30 @@ class ModelInformation:
             except ValueError:
                 print("Invalid input. Please enter a float value.")
 
+
+    @classmethod
+    def model_template_data_checker(cls, template: dict, data: dict):
+        if set(template.keys()) != set(data.keys()):
+            return False
+
+        for key in template:
+            if isinstance(template[key], dict):
+                if not isinstance(data[key], dict):
+                    return False
+
+                if not cls.model_template_data_checker(template[key], data[key]):
+                    return False
+
+        return True
+
     def add_model(self, assistant: bool = True, data: dict = None):
+        technical_name = ""
+
+        
         if not data and not assistant:
             raise ValueError("You must provide data to add a model if assistant is set to False")
 
-        if assistant and data:
+        elif assistant and data:
             print("Warning! Using the assistant will erase the data you provided. Do you want to continue? (y/n): ")
             if input().lower() != "y":
                 print("Model addition cancelled. Exiting...")
@@ -118,15 +139,20 @@ class ModelInformation:
                     elif overwrite != "y":
                         print("Model addition cancelled. Re-trying...")
                         continue
+
+        elif not self.model_template_data_checker(self.models_info["db_example"], data):
+            raise ValueError("The provided data doesnt match our formats. Please revise")
+
         else:
+            raise Exception("We don't know what happened. Please try again. The model wasn't added to the database")
 
 
-            self.models_info[technical_name] = {**gen_info, "pricing": pricing}
+        self.models_info[technical_name] = {**gen_info, "pricing": pricing}
 
-            with open(JSON_NAME + ".json", "w", encoding='utf-8') as f:
-                json.dump(self.models_info, f, indent=4)
-            print("Model added successfully!")
-            return
+        with open(JSON_NAME + ".json", "w", encoding='utf-8') as f:
+            json.dump(self.models_info, f, indent=4)
+        print("Model added successfully!")
+        return
 
 
 
